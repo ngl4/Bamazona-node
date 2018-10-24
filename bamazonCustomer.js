@@ -14,12 +14,7 @@ connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
 
-    //start writing code here...
-
     startShopping();
-
-    // End connection (place this somewhere inside the askQuestion() function)
-    //connection.end();
 
 });
 
@@ -29,7 +24,6 @@ function startShopping() {
         if (err) throw err;
         console.log(results);
 
-        //inquirer prompt users two messages 
         inquirer
             .prompt([{
                     name: "product_id",
@@ -59,8 +53,6 @@ function startShopping() {
 
                     var new_stock_quantity = chosenItem.stock_quantity - parseInt(answer.quantity);
 
-                    console.log(new_stock_quantity);
-
                     connection.query(
                         "UPDATE products SET ? WHERE ?",
                         [{
@@ -72,67 +64,38 @@ function startShopping() {
                         ],
                         function (error) {
                             if (error) throw err;
-                            console.log("successfully purchased the item!")
+                            console.log("successfully purchased the item!");
+                            console.log("You have purchased " + answer.quantity + " " + chosenItem.product_name + ".");
+                            continueOrNot();
                         }
                     );
 
                 } else {
-                    console.log("insufficient quantity! sorry!")
+                    console.log("Sorry! Insufficient quantity on this product!");
+                    console.log("We currently have: " + chosenItem.stock_quantity + " unit(s) left in our store!");
+                    continueOrNot();
                 }
 
             });
     });
 }
 
-// Sample code:
-//if (answer.ID !== "" and answer.units !== "") {
-
-//for loop -- to go through the list
-//if (result.units > answer.unit) {
-//     connection.query(
-//       "UPDATE products SET ? WHERE ?",
-//       [
-//         {
-//           stock_quantity: answer.units
-//         },
-//         {
-//           id: chosenItem.id
-//         }
-//       ],
-//       function(error) {
-//         if (error) throw err;
-//         console.log("successfully purchased!");
-//         continueOrNot(); --> to keep shopping 
-//       }
-//     );
-//   }
-//   else {
-//     console.log("insufficient quantity");
-//     continueOrNot(); --> to keep shopping 
-//   }
-
-
-//}
-
-
-//}
-
-
 function continueOrNot() {
 
     inquirer
         .prompt([{
-            //ask whether the user want to keep shopping other products
+            name: "confirm",
+            type: "confirm",
+            message: "Do you want to continue shopping for other products?"
         }])
         .then(function (answer) {
 
-            //if yes,
-            //run showAllProducts() function
-            //else,
-            //console.log("Thank you for shopping at Bamazona!");
-            //connection.end();
-
+            //console.log(answer.confirm); this will return true or false
+            if (answer.confirm) {
+                startShopping();
+            } else {
+                console.log("Thank you for shopping at Bamazona!");
+                connection.end();
+            }
         });
-
-
 }
