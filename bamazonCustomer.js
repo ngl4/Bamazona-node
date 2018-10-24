@@ -10,111 +10,129 @@ var connection = mysql.createConnection({
     database: "bamazon_db"
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
 
-    
     //start writing code here...
-    
-    showAllProducts();
+
+    startShopping();
 
     // End connection (place this somewhere inside the askQuestion() function)
     //connection.end();
 
 });
 
-function showAllProducts() {
+function startShopping() {
 
-    connection.query("SELECT * FROM products", function(err, results) {
+    connection.query("SELECT * FROM products", function (err, results) {
         if (err) throw err;
-
-        //show all products in a table format 
-        console.log (results);
-
-        //askQuestions();
-
-    });
-
-}
-
-function askQuestions() {
+        console.log(results);
 
         //inquirer prompt users two messages 
-
         inquirer
-      .prompt([
-        {
-            // 1. 
-            //ask for ID of the product they would like to buy
-        
-        },
-        {
-            //2.
-            //ask units of the product they would like to buy
-        }
-      ])
-      .then(function(answer) {
+            .prompt([{
+                    name: "product_id",
+                    type: "input",
+                    message: "What is the product you want to buy?(Enter the ID Number)"
 
-        //See sample code below
+                },
+                {
+                    name: "quantity",
+                    type: "input",
+                    message: "How many units do you want to buy for this chosen product?"
+                }
+            ])
+            .then(function (answer) {
 
+                var chosenItem;
+                for (i = 0; i < results.length; i++) {
+                    if (results[i].item_id === parseInt(answer.product_id)) {
+                        chosenItem = results[i];
+                    }
+
+                }
+
+                console.log(chosenItem);
+
+                if (chosenItem.stock_quantity >= parseInt(answer.quantity)) {
+
+                    var new_stock_quantity = chosenItem.stock_quantity - parseInt(answer.quantity);
+
+                    console.log(new_stock_quantity);
+
+                    connection.query(
+                        "UPDATE products SET ? WHERE ?",
+                        [{
+                                stock_quantity: new_stock_quantity
+                            },
+                            {
+                                item_id: chosenItem.item_id
+                            }
+                        ],
+                        function (error) {
+                            if (error) throw err;
+                            console.log("successfully purchased the item!")
+                        }
+                    );
+
+                } else {
+                    console.log("insufficient quantity! sorry!")
+                }
+
+            });
     });
-
 }
 
 // Sample code:
-     //if (answer.ID !== "" and answer.units !== "") {
+//if (answer.ID !== "" and answer.units !== "") {
 
-            //for loop -- to go through the list
-            //if (result.units > answer.unit) {
-                //     connection.query(
-                //       "UPDATE products SET ? WHERE ?",
-                //       [
-                //         {
-                //           stock_quantity: answer.units
-                //         },
-                //         {
-                //           id: chosenItem.id
-                //         }
-                //       ],
-                //       function(error) {
-                //         if (error) throw err;
-                //         console.log("successfully purchased!");
-                //         continueOrNot(); --> to keep shopping 
-                //       }
-                //     );
-                //   }
-                //   else {
-                //     console.log("insufficient quantity");
-                //     continueOrNot(); --> to keep shopping 
-                //   }
+//for loop -- to go through the list
+//if (result.units > answer.unit) {
+//     connection.query(
+//       "UPDATE products SET ? WHERE ?",
+//       [
+//         {
+//           stock_quantity: answer.units
+//         },
+//         {
+//           id: chosenItem.id
+//         }
+//       ],
+//       function(error) {
+//         if (error) throw err;
+//         console.log("successfully purchased!");
+//         continueOrNot(); --> to keep shopping 
+//       }
+//     );
+//   }
+//   else {
+//     console.log("insufficient quantity");
+//     continueOrNot(); --> to keep shopping 
+//   }
 
-                
-            //}
-                
 
-        //}
+//}
+
+
+//}
 
 
 function continueOrNot() {
 
     inquirer
-    .prompt([
-      {
-          //ask whether the user want to keep shopping other products
-      }
-    ])
-    .then(function(answer) {
+        .prompt([{
+            //ask whether the user want to keep shopping other products
+        }])
+        .then(function (answer) {
 
-      //if yes,
-      //run showAllProducts() function
-      //else,
-      //console.log("Thank you for shopping at Bamazona!");
-      //connection.end();
+            //if yes,
+            //run showAllProducts() function
+            //else,
+            //console.log("Thank you for shopping at Bamazona!");
+            //connection.end();
 
-  });
+        });
 
 
 }
-
-
