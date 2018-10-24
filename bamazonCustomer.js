@@ -1,27 +1,23 @@
-//Git: npm init 
-//Git: npm install mysql// npm install inquirer
+require('dotenv').config();
+var mysql = require("mysql");
+var inquirer = require("inquirer");
 
-
-//require npm 
-// var mysql = require("mysql");
-// var inquirer = require("inquirer");
-
-//mysql.createConnection
 var connection = mysql.createConnection({
-    host: process.env.host,
-    port: process.env.port,
-    user: process.env.user,
-    password: process.env.password,
+    host: process.env.MYSQL_HOST,
+    port: process.env.MYSQL_PORT,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
     database: "bamazon_db"
 });
 
 connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
+
     
     //start writing code here...
     
-    //showAllProducts();
+    showAllProducts();
 
     // End connection (place this somewhere inside the askQuestion() function)
     //connection.end();
@@ -34,9 +30,9 @@ function showAllProducts() {
         if (err) throw err;
 
         //show all products in a table format 
-        //console.log (results);
+        console.log (results);
 
-        askQuestions();
+        //askQuestions();
 
     });
 

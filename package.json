@@ -1,0 +1,24 @@
+{
+  "name": "bamazona-node",
+  "version": "1.0.0",
+  "description": "Bamazona-node is an application built with JavaScript, MySQL, Node.js, npm inquirer, mysql and table",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngl4/Bamazona-node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ngl4/Bamazona-node/issues"
+  },
+  "homepage": "https://github.com/ngl4/Bamazona-node#readme",
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "inquirer": "^6.2.0",
+    "mysql": "^2.16.0"
+  }
+}
