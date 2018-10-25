@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/ngl4/Bamazona-node#readme",
   "dependencies": {
+    "cli-table": "^0.3.1",
     "dotenv": "^6.1.0",
     "inquirer": "^6.2.0",
-    "mysql": "^2.16.0"
+    "mysql": "^2.16.0",
+    "table": "^5.1.0"
   }
 }

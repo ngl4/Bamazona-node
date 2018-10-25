@@ -1,6 +1,7 @@
 require('dotenv').config();
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var Table = require('cli-table');
 
 var connection = mysql.createConnection({
     host: process.env.MYSQL_HOST,
@@ -34,6 +35,20 @@ function showMenu() {
                 switch (answer.managerMenu) {
                     case "View Products for Sale":
                         console.log(results);
+
+
+                        // var Table = require('cli-table');
+                        // var table = new Table({
+                        //     head: ["Top Header 1", "Top Header 2", "Top Header 2", "Top Header 2", "Top Header 2"]
+                        // });
+
+                        // table.push(
+                        //     ['Value Row 1 Col 1', 'Value Row 1 Col 2', 'Value Row 1 Col 2', 'Value Row 1 Col 2', 'Value Row 1 Col 2']
+                        // );
+
+
+                        console.log(table.toString());
+
                         continueOrNot();
                         break;
 
@@ -76,10 +91,11 @@ function showMenu() {
                                     function (error) {
                                         if (error) throw err;
                                         console.log("Successfully Added More Inventory as Item ID " + answer.product_id);
+                                        continueOrNot();
                                     }
                                 );
                             });
-                        continueOrNot();
+
 
                         break;
 
@@ -118,10 +134,11 @@ function showMenu() {
                                     function (err) {
                                         if (err) throw err;
                                         console.log("Your new product was created successfully!");
+                                        continueOrNot();
                                     }
                                 );
                             });
-                        continueOrNot();
+
 
                         break;
 
