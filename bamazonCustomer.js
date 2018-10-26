@@ -1,7 +1,7 @@
 require('dotenv').config();
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-var Table = require('cli-table');
+//var Table = require('cli-table');
 
 
 var connection = mysql.createConnection({

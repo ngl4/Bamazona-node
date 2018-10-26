@@ -1,7 +1,7 @@
 require('dotenv').config();
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-var Table = require('cli-table');
+//var Table = require('cli-table');
 
 var connection = mysql.createConnection({
     host: process.env.MYSQL_HOST,
@@ -35,6 +35,8 @@ function showMenu() {
                 switch (answer.managerMenu) {
                     case "View Products for Sale":
                         console.log(results);
+                        // console.log(results + "\n----------\n");
+                        // console.log(results[0].item_id);
 
 
                         // var Table = require('cli-table');
@@ -45,9 +47,7 @@ function showMenu() {
                         // table.push(
                         //     ['Value Row 1 Col 1', 'Value Row 1 Col 2', 'Value Row 1 Col 2', 'Value Row 1 Col 2', 'Value Row 1 Col 2']
                         // );
-
-
-                        console.log(table.toString());
+                        //console.log(table.toString());
 
                         continueOrNot();
                         break;
