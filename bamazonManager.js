@@ -1,7 +1,7 @@
 require('dotenv').config();
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-//var Table = require('cli-table');
+var Table = require('cli-table');
 
 var connection = mysql.createConnection({
     host: process.env.MYSQL_HOST,
@@ -35,32 +35,39 @@ function showMenu() {
                 switch (answer.managerMenu) {
                     case "View Products for Sale":
                         console.log(results);
-                        // console.log(results + "\n----------\n");
-                        // console.log(results[0].item_id);
 
+                        var table = new Table({
+                            head: ["Product ID", "Product Name", "Department Name", "Price", "Stock Quantity"]
+                        });
 
-                        // var Table = require('cli-table');
-                        // var table = new Table({
-                        //     head: ["Top Header 1", "Top Header 2", "Top Header 2", "Top Header 2", "Top Header 2"]
-                        // });
+                        for (i = 0; i < results.length; i++) {
 
-                        // table.push(
-                        //     ['Value Row 1 Col 1', 'Value Row 1 Col 2', 'Value Row 1 Col 2', 'Value Row 1 Col 2', 'Value Row 1 Col 2']
-                        // );
-                        //console.log(table.toString());
+                            table.push(
+                                [results[i].item_id, results[i].product_name, results[i].department_name, results[i].price, results[i].stock_quantity]
+                            );
+
+                        }
+                        console.log(table.toString());
 
                         continueOrNot();
                         break;
 
                     case "View Low Inventory":
 
+                        var table = new Table({
+                            head: ["Product ID", "Product Name", "Department Name", "Price", "Stock Quantity"]
+                        });
+
                         var chosenItem;
                         for (i = 0; i < results.length; i++) {
-                            if (results[i].stock_quantity <= 8) {
+                            if (results[i].stock_quantity <= 5) {
                                 chosenItem = results[i];
-                                console.log(chosenItem);
+                                table.push(
+                                    [chosenItem.item_id, chosenItem.product_name, chosenItem.department_name, chosenItem.price, chosenItem.stock_quantity]
+                                );
                             }
                         }
+                        console.log(table.toString());
                         continueOrNot();
                         break;
 

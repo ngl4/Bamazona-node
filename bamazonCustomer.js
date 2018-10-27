@@ -1,7 +1,7 @@
 require('dotenv').config();
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-//var Table = require('cli-table');
+var Table = require('cli-table');
 
 
 var connection = mysql.createConnection({
@@ -24,7 +24,20 @@ function startShopping() {
 
     connection.query("SELECT * FROM products", function (err, results) {
         if (err) throw err;
-        console.log(results);
+        
+        //show all products 
+        var table = new Table({
+            head: ["Product ID", "Product Name", "Department Name", "Price", "Stock Quantity"]
+        });
+
+        for (i = 0; i < results.length; i++) {
+
+            table.push(
+                [results[i].item_id, results[i].product_name, results[i].department_name, results[i].price, results[i].stock_quantity]
+            );
+
+        }
+        console.log(table.toString());
 
         inquirer
             .prompt([{
@@ -41,15 +54,25 @@ function startShopping() {
             ])
             .then(function (answer) {
 
+                var table = new Table({
+                    head: ["Product ID", "Product Name", "Price", "Purchase Quantity"]
+                });
+
+
                 var chosenItem;
                 for (i = 0; i < results.length; i++) {
                     if (results[i].item_id === parseInt(answer.product_id)) {
                         chosenItem = results[i];
+
                     }
 
                 }
 
-                console.log(chosenItem);
+                table.push(
+                    [chosenItem.item_id, chosenItem.product_name, chosenItem.price, answer.quantity]
+                );
+                console.log(table.toString());
+
 
                 if (chosenItem.stock_quantity >= parseInt(answer.quantity)) {
 
